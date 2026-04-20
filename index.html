@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Para Yas</title>
+  <style>
+    :root{
+      --bg1:#0f1020;
+      --bg2:#231942;
+      --bg3:#5e548e;
+      --glass:rgba(255,255,255,.10);
+      --line:rgba(255,255,255,.12);
+      --text:#ffffff;
+      --muted:rgba(255,255,255,.82);
+      --soft:rgba(255,255,255,.08);
+      --soft2:rgba(255,255,255,.06);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at top right, rgba(255,255,255,.10), transparent 24%),
+        radial-gradient(circle at bottom left, rgba(255,214,231,.10), transparent 28%),
+        linear-gradient(160deg,var(--bg1),var(--bg2) 45%,var(--bg3));
+      padding:18px;
+    }
+    .wrap{
+      max-width:460px;
+      margin:0 auto;
+      padding:18px 0 28px;
+    }
+    .card{
+      background:var(--glass);
+      border:1px solid rgba(255,255,255,.12);
+      backdrop-filter:blur(14px);
+      -webkit-backdrop-filter:blur(14px);
+      border-radius:28px;
+      padding:24px 20px 22px;
+      box-shadow:0 20px 60px rgba(0,0,0,.35);
+    }
+    .pill{
+      display:inline-block;
+      padding:8px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,.12);
+      font-size:.88rem;
+      letter-spacing:.2px;
+      margin-bottom:14px;
+    }
+    h1{
+      margin:0 0 8px;
+      font-size:2.05rem;
+      line-height:1.08;
+    }
+    .sub{
+      margin:0 0 18px;
+      color:var(--muted);
+      line-height:1.55;
+      font-size:1rem;
+    }
+    .stats{
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr;
+      gap:10px;
+      margin:12px 0 14px;
+    }
+    .stat{
+      background:var(--soft2);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:14px 12px;
+      min-height:92px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      text-align:center;
+    }
+    .stat .label{
+      font-size:.79rem;
+      color:var(--muted);
+      margin-bottom:8px;
+    }
+    .stat .value{
+      font-size:1.02rem;
+      font-weight:800;
+      line-height:1.2;
+      text-align:center;
+    }
+
+    /* CONTADOR ESTILO IMAGEN */
+    .count-label-top {
+      font-size: .85rem;
+      color: var(--muted);
+      margin-bottom: 10px;
+      display: block;
+    }
+    .countdown-box {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .time-unit {
+      flex: 1;
+      background: rgba(15, 16, 32, 0.6);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 12px 0;
+      text-align: center;
+    }
+    .time-num {
+      font-size: 1.8rem;
+      font-weight: 800;
+      display: block;
+      line-height: 1;
+    }
+    .time-txt {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 6px;
+      display: block;
+    }
+
+    .timelineTitle{
+      font-size:.93rem;
+      color:var(--muted);
+      margin:4px 0 8px;
+      padding-left:2px;
+    }
+    .timeline{
+      margin-top:4px;
+      border-top:1px solid var(--line);
+    }
+    .item{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding:14px 2px;
+      border-bottom:1px solid var(--line);
+      font-size:.96rem;
+      cursor:pointer;
+      transition:transform .18s ease;
+    }
+    .item:hover.available{transform:translateY(-1px)}
+    .item .left{
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+      min-width:0;
+    }
+    .item .title{
+      font-weight:700;
+    }
+    .item .hint{
+      font-size:.84rem;
+      color:var(--muted);
+    }
+    .item .right{
+      color:var(--muted);
+      white-space:nowrap;
+      font-size:.93rem;
+    }
+    .item.locked{
+      opacity:.72;
+      cursor:not-allowed;
+    }
+    .item.available{
+      background:rgba(255,255,255,.04);
+    }
+    button{
+      margin-top:14px;
+      width:100%;
+      border:0;
+      border-radius:16px;
+      padding:14px 16px;
+      font-size:1rem;
+      font-weight:800;
+      background:linear-gradient(180deg,#fff,#f4d8e5);
+      color:#231942;
+      box-shadow:0 10px 22px rgba(0,0,0,.18);
+      cursor:pointer;
+    }
+
+    .page{
+      display:none;
+      animation:fade .25s ease;
+    }
+    .page.active{
+      display:block;
+    }
+    .clue-card{
+      background:var(--glass);
+      border:1px solid rgba(255,255,255,.12);
+      backdrop-filter:blur(14px);
+      -webkit-backdrop-filter:blur(14px);
+      border-radius:28px;
+      padding:24px 20px 22px;
+      box-shadow:0 20px 60px rgba(0,0,0,.35);
+      min-height:70vh;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+    .back{
+      background:rgba(255,255,255,.10);
+      color:#fff;
+      box-shadow:none;
+      margin-top:0;
+      margin-bottom:18px;
+    }
+    .clue-top{
+      margin-bottom:14px;
+    }
+    .clue-kicker{
+      display:inline-block;
+      padding:8px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,.12);
+      font-size:.88rem;
+      letter-spacing:.2px;
+      margin-bottom:16px;
+    }
+    .clue-title{
+      font-size:2rem;
+      margin:0 0 8px;
+      line-height:1.05;
+    }
+    .clue-time{
+      color:var(--muted);
+      font-size:.95rem;
+      margin-bottom:22px;
+    }
+    .clue-text{
+      font-size:1.13rem;
+      line-height:1.8;
+      white-space:pre-wrap;
+      margin:0;
+    }
+    .clue-bottom{
+      margin-top:28px;
+    }
+    .ghost{
+      background:linear-gradient(180deg,#fff,#f4d8e5);
+      color:#231942;
+    }
+    .confetti {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      z-index: 1000;
+      top: -10px;
+      pointer-events: none;
+    }
+    @keyframes fade{
+      from{opacity:0; transform:translateY(6px)}
+      to{opacity:1; transform:translateY(0)}
+    }
+    @media (max-width: 360px){
+      .stats{grid-template-columns:1fr}
+      .stat{min-height:auto}
+      .clue-title{font-size:1.7rem}
+      .clue-text{font-size:1.03rem}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section id="homePage" class="page active">
+      <main class="card">
+        <div class="pill">Operación Cumpleaños 🎁</div>
+        <h1>Feliz Pumple Pequeñaa ❤️,</h1>
+        <p class="sub">
+          Empieza el juego. Vas a descubrir nuestro fin de semana en 10 pistas.
+          Algunas van a ser mas faciles y otras mas dificiles... Te amo mucho muchoo,
+          suerteee 💕
+        </p>
+
+        <section class="stats">
+          <div class="stat">
+            <div class="label">Para</div>
+            <div class="value">Yas 💕</div>
+          </div>
+          <div class="stat">
+            <div class="label">Día especial</div>
+            <div class="value">20 de abril</div>
+          </div>
+          <div class="stat">
+            <div class="label">Pistas Abiertas</div>
+            <div class="value" id="progressText">0/10</div>
+          </div>
+        </section>
+
+        <span class="count-label-top">Cuenta regresiva hasta la próxima pista</span>
+        <div class="countdown-box">
+          <div class="time-unit"><span class="time-num" id="d">0</span><span class="time-txt">Días</span></div>
+          <div class="time-unit"><span class="time-num" id="h">00</span><span class="time-txt">Horas</span></div>
+          <div class="time-unit"><span class="time-num" id="m">00</span><span class="time-txt">Min</span></div>
+          <div class="time-unit"><span class="time-num" id="s">00</span><span class="time-txt">Seg</span></div>
+        </div>
+
+        <button id="openCurrentBtn">Abrir última pista disponible</button>
+
+        <div class="timelineTitle">Pistas</div>
+        <section class="timeline" id="timeline"></section>
+      </main>
+    </section>
+
+    <section id="cluePage" class="page">
+      <main class="clue-card">
+        <div>
+          <button class="back" id="backBtn">← Volver a la misión</button>
+          <div class="clue-top">
+            <div class="clue-kicker" id="clueKicker">Pista</div>
+            <h2 class="clue-title" id="clueTitle">Pista</h2>
+            <div class="clue-time" id="clueTime"></div>
+          </div>
+          <p class="clue-text" id="clueText"></p>
+        </div>
+        <div class="clue-bottom">
+          <button class="ghost" id="backBtnBottom">Seguir descubriendo</button>
+        </div>
+      </main>
+    </section>
+  </div>
+
+  <script>
+    const ARG_TZ = 'America/Argentina/Buenos_Aires';
+
+    const clues = [
+      { id: 0, date: '2026-04-20T12:09:00', title: 'Pista 0', hint: 'El verdadero inicio', text: 'Pista 0\n\nAcá empieza de verdad.\nNo sabés bien hacia dónde va.\nPero sí que hay algo esperándote.' },
+      { id: 1, date: '2026-04-20T14:09:00', title: 'Pista 1', hint: 'La primera puerta', text: 'Pista 1\n\nHoy empieza algo.\nNo hace falta que entiendas todo ahora.\nSolo necesito que confíes en mí y en lo que se viene.\n\nEsto recién arranca.' },
+      { id: 2, date: '2026-04-23T20:03:00', title: 'Pista 2', hint: 'Una pequeña señal', text: 'Pista 2\n\nTodavía no te voy a decir el destino.\nPero sí te aviso algo: no es un regalo para mirar.\nEs un regalo para vivir.' },
+      { id: 3, date: '2026-04-25T10:20:00', title: 'Pista 3', hint: 'Empezá a sospechar', text: 'Pista 3\n\nHay una escapada escondida entre estas horas.\nNo muy lejos.\nPero lo suficiente para que cambie el aire.' },
+      { id: 4, date: '2026-04-25T14:30:00', title: 'Pista 4', hint: 'No vayas desarreglada', text: 'Pista 4\n\nEn algún momento de esta historia,\nvas a querer estar linda.\nMucho más no puedo decirte todavía.' },
+      { id: 5, date: '2026-04-25T20:00:00', title: 'Pista 5', hint: 'Relax', text: 'Pista 5\n\nHay un momento pensado para bajar un cambio.\nDescansar.\nDisfrutar.\nY estar juntos.' },
+      { id: 6, date: '2026-04-25T22:50:00', title: 'Pista 6', hint: 'Noche especial', text: 'Pista 6\n\nLa noche no está puesta al azar.\nTiene algo preparado.\nY no, no te lo voy a revelar todavía.' },
+      { id: 7, date: '2026-04-26T08:30:00', title: 'Pista 7', hint: 'Día dos', text: 'Pista 7\n\nEsto no era solo un ratito.\nEs una experiencia completa.\nY todavía falta bastante.' },
+      { id: 8, date: '2026-04-26T13:00:00', title: 'Pista 8', hint: 'Cada vez más cerca', text: 'Pista 8\n\nYa casi podés ver la forma del regalo.\nTodavía no el nombre.\nPero sí su intención.' },
+      { id: 9, date: '2026-04-26T15:00:00', title: 'Pista 9', hint: 'Última curva', text: 'Pista 9\n\nEstuviste más cerca de la respuesta de lo que creías.\nHay ciudad.\nHay plan.\nY hay sorpresa.' },
+      { id: 10, date: '2026-04-26T18:20:00', title: 'Pista 10 · revelación final', hint: 'Fin del misterio', text: 'Pista 10\n\nLa última puerta se abre acá.\nY después la completamos juntos con la revelación final.' }
+    ];
+
+    const TOTAL_CLUES = 11;
+    let lastUnlockedCount = -1;
+
+    const timelineEl = document.getElementById('timeline');
+    const progressTextEl = document.getElementById('progressText');
+    const openCurrentBtn = document.getElementById('openCurrentBtn');
+    const homePage = document.getElementById('homePage');
+    const cluePage = document.getElementById('cluePage');
+
+    function pad(n){ return String(n).padStart(2,'0'); }
+
+    function getArgNow() {
+      return new Date(new Date().toLocaleString("en-US", {timeZone: ARG_TZ}));
+    }
+
+    function launchConfetti() {
+      const colors = ['#ff71b2', '#fff', '#5e548e', '#ffeb3b'];
+      const end = Date.now() + 4000;
+      const interval = setInterval(() => {
+        if (Date.now() > end) return clearInterval(interval);
+        for(let i=0; i<8; i++) {
+          const c = document.createElement('div');
+          c.className = 'confetti';
+          c.style.left = Math.random() * 100 + 'vw';
+          c.style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
+          document.body.appendChild(c);
+          c.animate([
+            { transform: 'translate3d(0,0,0) rotate(0)', opacity: 1 },
+            { transform: `translate3d(${(Math.random()-0.5)*200}px, 100vh, 0) rotate(360deg)`, opacity: 0 }
+          ], { duration: 2000 + Math.random()*1000 }).onfinish = () => c.remove();
+        }
+      }, 150);
+    }
+
+    function formatArgDisplay(dateStr){
+      const d = new Date(dateStr.replace('T', ' '));
+      const fmt = new Intl.DateTimeFormat('es-AR', {
+        weekday:'short', day:'2-digit', month:'2-digit',
+        hour:'2-digit', minute:'2-digit', hour12:false
+      });
+      return fmt.format(d).replace(',', ' ·');
+    }
+
+    function render(){
+      const now = getArgNow();
+      let openCount = 0;
+      let nextClue = null;
+
+      const states = clues.map(c => {
+        const openAt = new Date(c.date.replace('T', ' '));
+        const available = now >= openAt;
+        if (available) openCount++;
+        else if (!nextClue) nextClue = { ...c, openAt };
+        return { ...c, available };
+      });
+
+      if (lastUnlockedCount !== -1 && openCount > lastUnlockedCount) launchConfetti();
+      lastUnlockedCount = openCount;
+
+      if (nextClue) {
+        const diff = nextClue.openAt - now;
+        document.getElementById('d').textContent = Math.floor(diff/86400000);
+        document.getElementById('h').textContent = pad(Math.floor((diff%86400000)/3600000));
+        document.getElementById('m').textContent = pad(Math.floor((diff%3600000)/60000));
+        document.getElementById('s').textContent = pad(Math.floor((diff%60000)/1000));
+      } else {
+        ['d','h','m','s'].forEach(id => document.getElementById(id).textContent = '00');
+      }
+
+      progressTextEl.textContent = `${openCount}/${TOTAL_CLUES}`;
+
+      timelineEl.innerHTML = '';
+      states.forEach(clue => {
+        const item = document.createElement('div');
+        item.className = `item ${clue.available ? 'available' : 'locked'}`;
+        item.innerHTML = `
+          <div class="left">
+            <div class="title">${clue.available ? '✓ ' : '🔒 '}${clue.title}</div>
+            <div class="hint">${clue.available ? clue.hint : 'Todavía cerrada'}</div>
+          </div>
+          <div class="right">${formatArgDisplay(clue.date)}</div>
+        `;
+        if (clue.available) item.onclick = () => showClue(clue);
+        timelineEl.appendChild(item);
+      });
+
+      openCurrentBtn.onclick = () => {
+        const avail = states.filter(s => s.available);
+        if (avail.length) showClue(avail[avail.length-1]);
+      };
+    }
+
+    function showClue(clue){
+      document.getElementById('clueTitle').textContent = clue.title;
+      document.getElementById('clueText').textContent = clue.text;
+      document.getElementById('clueTime').textContent = formatArgDisplay(clue.date);
+      homePage.classList.remove('active');
+      cluePage.classList.add('active');
+    }
+
+    const back = () => { cluePage.classList.remove('active'); homePage.classList.add('active'); render(); };
+    document.getElementById('backBtn').onclick = back;
+    document.getElementById('backBtnBottom').onclick = back;
+
+    lastUnlockedCount = clues.filter(c => getArgNow() >= new Date(c.date.replace('T', ' '))).length;
+    render();
+    setInterval(render, 1000);
+  </script>
+</body>
+</html>
