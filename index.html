@@ -83,7 +83,6 @@
     .stat .label{ font-size:.79rem; color:var(--muted); margin-bottom:8px; }
     .stat .value{ font-size:1.02rem; font-weight:800; }
 
-    /* CONTADOR ESTILO BLOQUES */
     .count-label-top { font-size: .85rem; color: var(--muted); margin-bottom: 10px; display: block; }
     .countdown-box { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 16px; }
     .time-unit { flex: 1; background: rgba(15, 16, 32, 0.6); border: 1px solid var(--line); border-radius: 16px; padding: 12px 0; text-align: center; }
@@ -101,7 +100,7 @@
     .item.available{ background:rgba(255,255,255,.04); }
     .item .title{ font-weight:700; }
     .item .hint{ font-size:.84rem; color:var(--muted); }
-    .item .right{ color:var(--muted); font-size:.93rem; }
+    .item .right{ color:var(--muted); font-size:.82rem; text-align: right; }
 
     button{
       margin-top:14px; width:100%; border:0; border-radius:16px; padding:14px 16px;
@@ -168,7 +167,7 @@
   <script>
     const ARG_TZ = 'America/Argentina/Buenos_Aires';
     const clues = [
-      { id: 1, date: '2026-04-20T12:31:00', title: 'Pista 1', hint: 'La primera puerta', text: '1. El viaje empieza antes de salir de casa. Tu misión ahora es elegir qué te va a acompañar. Guardá lo justo y necesario: Ropa linda, ropa cómoda, ropa linda y cómoda... JAJAJAJA. Nos espera una ventana que mira a lo sagrado y un buen desayuno. ¿Te parece un buen trato?' },
+      { id: 1, date: '2026-04-20T14:15:00', title: 'Pista 1', hint: 'La primera puerta', text: '1. El viaje empieza antes de salir de casa. Tu misión ahora es elegir qué te va a acompañar. Guardá lo justo y necesario: Ropa linda, ropa cómoda, ropa linda y cómoda... JAJAJAJA. Nos espera una ventana que mira a lo sagrado y un buen desayuno. ¿Te parece un buen trato?' },
       { id: 2, date: '2026-04-23T20:03:00', title: 'Pista 2', hint: 'Una pequeña señal', text: 'Pista 2\n\nTodavía no te voy a decir el destino.\nPero sí te aviso algo: no es un regalo para mirar.\nEs un regalo para vivir.' },
       { id: 3, date: '2026-04-25T10:20:00', title: 'Pista 3', hint: 'Empezá a sospechar', text: 'Pista 3\n\nHay una escapada escondida entre estas horas.\nNo muy lejos.\nPero lo suficiente para que cambie el aire.' },
       { id: 4, date: '2026-04-25T14:30:00', title: 'Pista 4', hint: 'No vayas desarreglada', text: 'Pista 4\n\nEn algún momento de esta historia,\nvas a querer estar linda.\nMucho más no puedo decirte todavía.' },
@@ -230,13 +229,53 @@
       states.forEach(c => {
         const div = document.createElement('div');
         div.className = `item ${c.available ? 'available' : 'locked'}`;
-        div.innerHTML = `<div class="left"><div class="title">${c.available ? '✓ ' : '🔒 '}${c.title}</div><div class="hint">${c.available ? c.hint : 'Todavía cerrada'}</div></div><div class="right">${c.date.split('T')[1].substring(0,5)} hs</div>`;
-        if(c.available) div.onclick = () => { document.getElementById('clueTitle').textContent = c.title; document.getElementById('clueText').textContent = c.text; document.getElementById('homePage').classList.remove('active'); document.getElementById('cluePage').classList.add('active'); };
+        
+        // Formatear fecha para el lado derecho
+        const dt = new Date(c.date.replace('T', ' '));
+        const day = String(dt.getDate()).padStart(2,'0');
+        const month = String(dt.getMonth() + 1).padStart(2,'0');
+        const time = c.date.split('T')[1].substring(0,5);
+        
+        div.innerHTML = `
+          <div class="left">
+            <div class="title">${c.available ? '✓ ' : '🔒 '}${c.title}</div>
+            <div class="hint">${c.available ? c.hint : 'Todavía cerrada'}</div>
+          </div>
+          <div class="right">${day}/${month}<br>${time} hs</div>
+        `;
+        
+        if(c.available) div.onclick = () => { 
+          document.getElementById('clueTitle').textContent = c.title; 
+          document.getElementById('clueText').textContent = c.text; 
+          document.getElementById('homePage').classList.remove('active'); 
+          document.getElementById('cluePage').classList.add('active'); 
+        };
         container.appendChild(div);
       });
     }
 
-    document.getElementById('backBtn').onclick = document.getElementById('backBtnBottom').onclick = () => { document.getElementById('cluePage').classList.remove('active'); document.getElementById('homePage').classList.add('active'); };
+    document.getElementById('backBtn').onclick = document.getElementById('backBtnBottom').onclick = () => { 
+      document.getElementById('cluePage').classList.remove('active'); 
+      document.getElementById('homePage').classList.add('active'); 
+    };
+    
+    // Función para el botón central
+    document.getElementById('openCurrentBtn').onclick = () => {
+      const now = getArgNow();
+      let lastAvailable = null;
+      clues.forEach(c => {
+        if (now >= new Date(c.date.replace('T', ' '))) lastAvailable = c;
+      });
+      if (lastAvailable) {
+        document.getElementById('clueTitle').textContent = lastAvailable.title; 
+        document.getElementById('clueText').textContent = lastAvailable.text; 
+        document.getElementById('homePage').classList.remove('active'); 
+        document.getElementById('cluePage').classList.add('active');
+      } else {
+        alert("Todavía no hay pistas disponibles.");
+      }
+    };
+
     setInterval(render, 1000); render();
   </script>
 </body>
