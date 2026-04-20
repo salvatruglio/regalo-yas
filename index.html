@@ -83,6 +83,7 @@
     .stat .label{ font-size:.79rem; color:var(--muted); margin-bottom:8px; }
     .stat .value{ font-size:1.02rem; font-weight:800; }
 
+    /* CONTADOR ESTILO BLOQUES */
     .count-label-top { font-size: .85rem; color: var(--muted); margin-bottom: 10px; display: block; }
     .countdown-box { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 16px; }
     .time-unit { flex: 1; background: rgba(15, 16, 32, 0.6); border: 1px solid var(--line); border-radius: 16px; padding: 12px 0; text-align: center; }
@@ -126,12 +127,16 @@
       <main class="card">
         <div class="pill">Operación Cumpleaños 🎁</div>
         <h1>Feliz Pumple Pequeñaa ❤️,</h1>
-        <p class="sub">Descubrí nuestro fin de semana en 10 pistas. ¡Suerte! 💕</p>
+        <p class="sub">
+          Empieza el juego. Vas a descubrir nuestro fin de semana en 10 pistas. 
+          Algunas van a ser mas faciles y otras mas dificiles... Te amo mucho muchoo, 
+          suerteee 💕
+        </p>
 
         <section class="stats">
           <div class="stat"><div class="label">Para</div><div class="value">Yas 💕</div></div>
           <div class="stat"><div class="label">Día especial</div><div class="value">20 de abril</div></div>
-          <div class="stat"><div class="label">Abiertas</div><div class="value" id="progressText">0/10</div></div>
+          <div class="stat"><div class="label">Pistas Abiertas</div><div class="value" id="progressText">0/10</div></div>
         </section>
 
         <span class="count-label-top">Cuenta regresiva hasta la próxima pista</span>
@@ -164,15 +169,15 @@
     const ARG_TZ = 'America/Argentina/Buenos_Aires';
     const clues = [
       { id: 1, date: '2026-04-20T14:09:00', title: 'Pista 1', hint: 'La primera puerta', text: '1. El viaje empieza antes de salir de casa. Tu misión ahora es elegir qué te va a acompañar. Guardá lo justo y necesario: Ropa linda, ropa cómoda, ropa linda y cómoda... JAJAJAJA. Nos espera una ventana que mira a lo sagrado y un buen desayuno. ¿Te parece un buen trato?' },
-      { id: 2, date: '2026-04-23T20:03:00', title: 'Pista 2', hint: 'Una señal', text: 'Pista 2\n\nTodavía no te voy a decir el destino.\nPero sí te aviso algo: no es un regalo para mirar.\nEs un regalo para vivir.' },
+      { id: 2, date: '2026-04-23T20:03:00', title: 'Pista 2', hint: 'Una pequeña señal', text: 'Pista 2\n\nTodavía no te voy a decir el destino.\nPero sí te aviso algo: no es un regalo para mirar.\nEs un regalo para vivir.' },
       { id: 3, date: '2026-04-25T10:20:00', title: 'Pista 3', hint: 'Empezá a sospechar', text: 'Pista 3\n\nHay una escapada escondida entre estas horas.\nNo muy lejos.\nPero lo suficiente para que cambie el aire.' },
-      { id: 4, date: '2026-04-25T14:30:00', title: 'Pista 4', hint: 'No vayas desarreglada', text: 'Pista 4\n\nEn algún momento de esta historia,\nvas a querer estar linda.' },
-      { id: 5, date: '2026-04-25T20:00:00', title: 'Pista 5', hint: 'Relax', text: 'Pista 5\n\nMomento pensado para bajar un cambio.\nEstar juntos.' },
-      { id: 6, date: '2026-04-25T22:50:00', title: 'Pista 6', hint: 'Noche especial', text: 'Pista 6\n\nLa noche no está puesta al azar.\nTiene algo preparado.' },
-      { id: 7, date: '2026-04-26T08:30:00', title: 'Pista 7', hint: 'Día dos', text: 'Pista 7\n\nEs una experiencia completa.\nY todavía falta bastante.' },
-      { id: 8, date: '2026-04-26T13:00:00', title: 'Pista 8', hint: 'Cada vez más cerca', text: 'Pista 8\n\nYa casi podés ver la forma del regalo.\nNo el nombre, pero sí su intención.' },
-      { id: 9, date: '2026-04-26T15:00:00', title: 'Pista 9', hint: 'Última curva', text: 'Pista 9\n\nEstuviste más cerca de la respuesta de lo que creías.\nHay ciudad. Hay plan. Hay sorpresa.' },
-      { id: 10, date: '2026-04-26T18:20:00', title: 'Pista 10', hint: 'Fin del misterio', text: 'Pista 10\n\nLa última puerta se abre acá.\nCompletamos juntos la revelación final.' }
+      { id: 4, date: '2026-04-25T14:30:00', title: 'Pista 4', hint: 'No vayas desarreglada', text: 'Pista 4\n\nEn algún momento de esta historia,\nvas a querer estar linda.\nMucho más no puedo decirte todavía.' },
+      { id: 5, date: '2026-04-25T20:00:00', title: 'Pista 5', hint: 'Relax', text: 'Pista 5\n\nHay un momento pensado para bajar un cambio.\nDescansar.\nDisfrutar.\nY estar juntos.' },
+      { id: 6, date: '2026-04-25T22:50:00', title: 'Pista 6', hint: 'Noche especial', text: 'Pista 6\n\nLa noche no está puesta al azar.\nTiene algo preparado.\nY no, no te lo voy a revelar todavía.' },
+      { id: 7, date: '2026-04-26T08:30:00', title: 'Pista 7', hint: 'Día dos', text: 'Pista 7\n\nEsto no era solo un ratito.\nEs una experiencia completa.\nY todavía falta bastante.' },
+      { id: 8, date: '2026-04-26T13:00:00', title: 'Pista 8', hint: 'Cada vez más cerca', text: 'Pista 8\n\nYa casi podés ver la forma del regalo.\nTodavía no el nombre.\nPero sí su intención.' },
+      { id: 9, date: '2026-04-26T15:00:00', title: 'Pista 9', hint: 'Última curva', text: 'Pista 9\n\nEstuviste más cerca de la respuesta de lo que creías.\nHay ciudad.\nHay plan.\nY hay sorpresa.' },
+      { id: 10, date: '2026-04-26T18:20:00', title: 'Pista 10 · revelación final', hint: 'Fin del misterio', text: 'Pista 10\n\nLa última puerta se abre acá.\nY después la completamos juntos con la revelación final.' }
     ];
 
     let lastUnlockedCount = -1;
@@ -225,7 +230,7 @@
       states.forEach(c => {
         const div = document.createElement('div');
         div.className = `item ${c.available ? 'available' : 'locked'}`;
-        div.innerHTML = `<div class="left"><div class="title">${c.available ? '✓ ' : '🔒 '}${c.title}</div><div class="hint">${c.available ? c.hint : 'Cerrada'}</div></div><div class="right">${c.date.split('T')[1].substring(0,5)} hs</div>`;
+        div.innerHTML = `<div class="left"><div class="title">${c.available ? '✓ ' : '🔒 '}${c.title}</div><div class="hint">${c.available ? c.hint : 'Todavía cerrada'}</div></div><div class="right">${c.date.split('T')[1].substring(0,5)} hs</div>`;
         if(c.available) div.onclick = () => { document.getElementById('clueTitle').textContent = c.title; document.getElementById('clueText').textContent = c.text; document.getElementById('homePage').classList.remove('active'); document.getElementById('cluePage').classList.add('active'); };
         container.appendChild(div);
       });
