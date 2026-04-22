@@ -128,8 +128,8 @@
         <h1>Feliz Pumple Pequeñaa ❤️,</h1>
         <p class="sub">
           Empieza el juego. Vas a descubrir nuestro fin de semana en 10 pistas. 
-          Algunas van a ser mas faciles y otras mas dificiles... Te amo mucho muchoo, 
-          suerteee 💕
+          Algunas van a ser más fáciles y otras más difíciles... Te amo mucho muchoo, 
+          suerteee 🎂🥳🎉
         </p>
 
         <section class="stats">
@@ -138,7 +138,7 @@
           <div class="stat"><div class="label">Pistas Abiertas</div><div class="value" id="progressText">0/10</div></div>
         </section>
 
-        <span class="count-label-top">Cuenta regresiva hasta la próxima pista</span>
+        <span class="count-label-top" id="countdownLabel">Cuenta regresiva hasta la próxima pista</span>
         <div class="countdown-box">
           <div class="time-unit"><span class="time-num" id="d">0</span><span class="time-txt">Días</span></div>
           <div class="time-unit"><span class="time-num" id="h">00</span><span class="time-txt">Horas</span></div>
@@ -167,19 +167,23 @@
   <script>
     const ARG_TZ = 'America/Argentina/Buenos_Aires';
     const clues = [
-      { id: 1, date: '2026-04-20T14:15:00', title: 'Pista 1', hint: 'La primera puerta', text: '1. El viaje empieza antes de salir de casa. Tu misión ahora es elegir qué te va a acompañar. Guardá lo justo y necesario: Ropa linda, ropa cómoda, ropa linda y cómoda... JAJAJAJA. Nos espera una ventana que mira a lo sagrado y un buen desayuno. ¿Te parece un buen trato?' },
-      { id: 2, date: '2026-04-23T20:03:00', title: 'Pista 2', hint: 'Una pequeña señal', text: 'Pista 2\n\nTodavía no te voy a decir el destino.\nPero sí te aviso algo: no es un regalo para mirar.\nEs un regalo para vivir.' },
-      { id: 3, date: '2026-04-25T10:20:00', title: 'Pista 3', hint: 'Empezá a sospechar', text: 'Pista 3\n\nHay una escapada escondida entre estas horas.\nNo muy lejos.\nPero lo suficiente para que cambie el aire.' },
-      { id: 4, date: '2026-04-25T14:30:00', title: 'Pista 4', hint: 'No vayas desarreglada', text: 'Pista 4\n\nEn algún momento de esta historia,\nvas a querer estar linda.\nMucho más no puedo decirte todavía.' },
-      { id: 5, date: '2026-04-25T20:00:00', title: 'Pista 5', hint: 'Relax', text: 'Pista 5\n\nHay un momento pensado para bajar un cambio.\nDescansar.\nDisfrutar.\nY estar juntos.' },
-      { id: 6, date: '2026-04-25T22:50:00', title: 'Pista 6', hint: 'Noche especial', text: 'Pista 6\n\nLa noche no está puesta al azar.\nTiene algo preparado.\nY no, no te lo voy a revelar todavía.' },
-      { id: 7, date: '2026-04-26T08:30:00', title: 'Pista 7', hint: 'Día dos', text: 'Pista 7\n\nEsto no era solo un ratito.\nEs una experiencia completa.\nY todavía falta bastante.' },
-      { id: 8, date: '2026-04-26T13:00:00', title: 'Pista 8', hint: 'Cada vez más cerca', text: 'Pista 8\n\nYa casi podés ver la forma del regalo.\nTodavía no el nombre.\nPero sí su intención.' },
-      { id: 9, date: '2026-04-26T15:00:00', title: 'Pista 9', hint: 'Última curva', text: 'Pista 9\n\nEstuviste más cerca de la respuesta de lo que creías.\nHay ciudad.\nHay plan.\nY hay sorpresa.' },
-      { id: 10, date: '2026-04-26T18:20:00', title: 'Pista 10', hint: 'Fin del misterio', text: 'Pista 10\n\nLa última puerta se abre acá.\nY después la completamos juntos con la revelación final.' }
+      { id: 1, date: '2026-04-20T14:15:00', title: 'Pista 1', locationName: 'Hotel 🏩', text: '1. El viaje empieza antes de salir de casa. Tu misión ahora es elegir qué te va a acompañar. Guardá lo justo y necesario: Ropa linda, ropa cómoda, ropa linda y cómoda... JAJAJAJA. Nos espera una ventana que mira a lo sagrado y un buen desayuno. ¿Te parece un buen trato?' },
+      { id: 2, date: '2026-04-23T20:03:00', title: 'Pista 2', locationName: 'La Plata 📍', text: '2. Dicen que no todo lo que brilla es oro... a veces es el segundo puesto 🥈. Preparate para un laberinto diseñado con regla y escuadra, donde el que sigue derecho se choca. Ya que está de moda la carne de burro, vamos a pasar a visitar a uno enano y soviético. ¿Adivinaste?' },
+      { id: 3, date: '2026-04-25T10:20:00', title: 'Pista 3', locationName: 'Catedral ⛪️', text: '3. Primera parada, donde mirar arriba no será distracción… sino dirección. Hay un órgano que mantiene vivo el lugar y no tiene nada que ver con la medicina. Si uno habla es escuchado, pero debe hacer silencio. ¿Donde vamos?' },
+      { id: 4, date: '2026-04-25T14:30:00', title: 'Pista 4', locationName: 'República de los niños 👧🏼', text: '4. El próximo lugar es ideal para vos pequeña 👧🏼 (aunque ahora ya sos una vieja así que no se si podrás entrar). Volvemos en el tiempo a cuando éramos niñatoss. Salimos un rato de la República Argentina y entramos en...' },
+      { id: 5, date: '2026-04-25T20:00:00', title: 'Pista 5', locationName: 'Homenaje a Queen 🎸', text: '5. Vos sos mi princesa, pero ahora vamos a ver a la reina 👸. Cuando se abra el telón va a aparecer el primer planeta del sistema solar (o casi). Que nadie te pare ahora ni te haga morder el polvo, mantener tu vibra bohemia y hace roquear, que somos campeones mi amiga 🎶.' },
+      { id: 6, date: '2026-04-25T22:50:00', title: 'Pista 6', locationName: 'Rooftop 🍸', text: '6. Todavía no termina la noche, hay que cerrarla con la mejor vista. Toca brindar 🍹 por tu cumple en un lindo spot.' },
+      { id: 7, date: '2026-04-26T08:30:00', title: 'Pista 7', locationName: 'Masajes 💆🏼‍♀️', text: '7. Está mañana distinto a lo habitual arranca tranquila y relajante. Un ratito de paz y relajación acá en la recepción. Bajemos unos cambios, aflojemos, y después seguimos 💆🏼‍♀️💆🏼‍♂️.' },
+      { id: 8, date: '2026-04-26T13:00:00', title: 'Pista 8', locationName: 'Cancha de Estudiantes 🦁', text: '8. Ahora tenemos que jugar un partido para matar el hambre. A pie de campo hay que esquivar los pelotazos ⚽️. En terreno pincharrata capaz aparece la bruja 🧙‍♀️. Me gustan mucho los colores del lugar, me hacen acordar a casa.' },
+      { id: 9, date: '2026-04-26T15:00:00', title: 'Pista 9', locationName: 'Museo de Ciencias Naturales 🦖', text: '9. Ahora toca un poco de cultura y aprender de la naturaleza. El lugar está lleno de huesos y cadaveres ☠️🧟‍♂️. Viajamos algunos millones de años al pasado para visitar unos amiguitos.' },
+      { id: 10, date: '2026-04-26T18:20:00', title: 'Pista 10', locationName: 'Planetario 🌌🪐', text: '10. Última parada. Otra vez hay que mirar para arriba, pero esta vez es distinto. Nada religioso sino más cósmico. Venimos de ver cosas muy viejas y ahora vamos a ver cosas muy lejanas. Va a haber bastante espacio y luces.' }
     ];
 
+    const finalMessage = "Bueno pequeña, termino este recorrido de cumpleañosss 🎂🎁. Espero que la hayas pasado lindo y que haya salido todo bien este tema de la página web JAJAJAJAJAJJA. Quería decirte que me cambiaste la vida, que sos lo mejor que me pasó y que te voy a amar para siempre 👩‍❤️‍👨. Cualquier cosa que nos propongamos en la vida la vamos a conseguir juntos. Sos la mejor persona que conozco y no dejes que nadie cambie tu esencia y alegría, que me iluminan todos los días. Te amo con todo mi corazonnnnn❤️❤️❤️";
+
     let lastUnlockedCount = -1;
+    let finalCountdownReached = false;
+
     function getArgNow() { return new Date(new Date().toLocaleString("en-US", {timeZone: ARG_TZ})); }
 
     function launchConfetti() {
@@ -202,6 +206,7 @@
       const now = getArgNow();
       let openCount = 0;
       let nextClue = null;
+      
       const states = clues.map(c => {
         const openAt = new Date(c.date.replace('T', ' '));
         const available = now >= openAt;
@@ -213,33 +218,67 @@
       if (lastUnlockedCount !== -1 && openCount > lastUnlockedCount) launchConfetti();
       lastUnlockedCount = openCount;
 
-      if (nextClue) {
+      const mainBtn = document.getElementById('openCurrentBtn');
+      const countLabel = document.getElementById('countdownLabel');
+
+      // Lógica de contador y botón final
+      if (openCount === 10) {
+        const clue10Time = new Date(clues[9].date.replace('T', ' '));
+        const finalTarget = new Date(clue10Time.getTime() + (2.5 * 60 * 60 * 1000));
+        const diff = finalTarget - now;
+
+        countLabel.textContent = "Tiempo para la sorpresa final...";
+
+        if (diff > 0) {
+          document.getElementById('d').textContent = '0';
+          document.getElementById('h').textContent = String(Math.floor((diff%86400000)/3600000)).padStart(2,'0');
+          document.getElementById('m').textContent = String(Math.floor((diff%3600000)/60000)).padStart(2,'0');
+          document.getElementById('s').textContent = String(Math.floor((diff%60000)/1000)).padStart(2,'0');
+          mainBtn.textContent = "Abrir última pista disponible";
+          finalCountdownReached = false;
+        } else {
+          document.getElementById('d').textContent = '0';
+          document.getElementById('h').textContent = '00';
+          document.getElementById('m').textContent = '00';
+          document.getElementById('s').textContent = '00';
+          mainBtn.textContent = "Mensaje final....";
+          finalCountdownReached = true;
+        }
+      } else if (nextClue) {
         const diff = nextClue.openAt - now;
         document.getElementById('d').textContent = Math.floor(diff/86400000);
         document.getElementById('h').textContent = String(Math.floor((diff%86400000)/3600000)).padStart(2,'0');
         document.getElementById('m').textContent = String(Math.floor((diff%3600000)/60000)).padStart(2,'0');
         document.getElementById('s').textContent = String(Math.floor((diff%60000)/1000)).padStart(2,'0');
-      } else {
-        ['d','h','m','s'].forEach(id => document.getElementById(id).textContent = '00');
+        mainBtn.textContent = "Abrir última pista disponible";
       }
-      
+
       document.getElementById('progressText').textContent = `${openCount}/10`;
       const container = document.getElementById('timeline');
       container.innerHTML = '';
-      states.forEach(c => {
+      
+      states.forEach((c, index) => {
         const div = document.createElement('div');
         div.className = `item ${c.available ? 'available' : 'locked'}`;
         
-        // Formatear fecha para el lado derecho
         const dt = new Date(c.date.replace('T', ' '));
         const day = String(dt.getDate()).padStart(2,'0');
         const month = String(dt.getMonth() + 1).padStart(2,'0');
         const time = c.date.split('T')[1].substring(0,5);
         
+        // Revelar nombre solo si la pista SIGUIENTE está desbloqueada
+        // Para la pista 10, se revela cuando el contador final llega a 0
+        let displayHint = "";
+        if (index < 9) {
+          if (states[index + 1].available) displayHint = c.locationName;
+        } else {
+          if (finalCountdownReached) displayHint = c.locationName;
+        }
+
         div.innerHTML = `
           <div class="left">
             <div class="title">${c.available ? '✓ ' : '🔒 '}${c.title}</div>
-            <div class="hint">${c.available ? c.hint : 'Todavía cerrada'}</div>
+            <div class="hint">${displayHint}</div>
           </div>
           <div class="right">${day}/${month}<br>${time} hs</div>
         `;
@@ -259,8 +298,16 @@
       document.getElementById('homePage').classList.add('active'); 
     };
     
-    // Función para el botón central
     document.getElementById('openCurrentBtn').onclick = () => {
+      // Si el contador final terminó, abrir mensaje final
+      if (finalCountdownReached) {
+        document.getElementById('clueTitle').textContent = "Para mi amor ❤️"; 
+        document.getElementById('clueText').textContent = finalMessage; 
+        document.getElementById('homePage').classList.remove('active'); 
+        document.getElementById('cluePage').classList.add('active');
+        return;
+      }
+
       const now = getArgNow();
       let lastAvailable = null;
       clues.forEach(c => {
