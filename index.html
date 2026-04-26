@@ -224,7 +224,7 @@
       // Lógica de contador y botón final
       if (openCount === 10) {
         const clue10Time = new Date(clues[9].date.replace('T', ' '));
-        const finalTarget = new Date(clue10Time.getTime() + (1.8 * 60 * 60 * 1000));
+        const finalTarget = new Date(clue10Time.getTime() + (1.5 * 60 * 60 * 1000));
         const diff = finalTarget - now;
 
         countLabel.textContent = "Tiempo para la sorpresa final...";
